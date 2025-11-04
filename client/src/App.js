@@ -17,7 +17,7 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const resp = await fetch("http://localhost:5000/api/register", {
+      const resp = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
