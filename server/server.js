@@ -46,17 +46,16 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// --- Serve Frontend ---
+// ✅ Serve React frontend (client/build)
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static build folder
 app.use(express.static(path.join(__dirname, "../client/build")));
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
-// --- Start Server ---
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
