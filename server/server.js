@@ -83,7 +83,6 @@ app.get("*", (req, res) => {
 // ✅ Start the server
 const PORT = process.env.PORT || 5000;
 
-import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 
