@@ -3,7 +3,7 @@ node_modules/
 npm-debug.log
 
 # Build outputs
-client/build/
+# client/build/
 
 # Environment variables
 server/.env
