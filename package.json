@@ -1,12 +1,15 @@
 {
   "name": "sirinova-platform",
   "version": "1.0.0",
-  "private": true,
+  "main": "server/server.js",
   "scripts": {
-    "postinstall": "npm run install-server && npm run install-client",
-    "install-server": "cd server && npm install",
-    "install-client": "cd client && npm install",
-    "build": "cd client && npm run build",
-    "start": "node server/server.js"
+    "start": "node server/server.js",
+    "build": "cd client && npm install && npm run build"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "mongoose": "^8.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5"
   }
 }
