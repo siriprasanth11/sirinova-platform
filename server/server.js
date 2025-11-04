@@ -1,18 +1,19 @@
+// ===== 📦 Imports =====
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
+import { dirname } from "path";
 
+// ===== ⚙️ Config =====
 dotenv.config();
-
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
-// ✅ MongoDB connection
+// ===== 🌍 MongoDB Connection =====
 const MONGO_URI = process.env.MONGO_URI;
 console.log("MONGO_URI value is:", MONGO_URI);
 
@@ -21,7 +22,7 @@ mongoose
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("MongoDB Error:", err));
 
-// ✅ Define Schema and Model *once*, outside the route
+// ===== 🧩 Mongoose Schema =====
 const registrationSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -31,27 +32,20 @@ const registrationSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now },
 });
 
-const Registration = mongoose.model("Registration", registrationSchema);
-export default Registration;
+const Registration =
+  mongoose.models.Registration || mongoose.model("Registration", registrationSchema);
 
-// ✅ Test route
+// ===== 🧠 Routes =====
+
+// Health check
 app.get("/", (req, res) => {
   res.send("SiriNova backend is running!");
 });
 
-// ✅ POST route for registrations
+// Save new registration
 app.post("/api/register", async (req, res) => {
   try {
-    const { name, email, phone, danceStyle, experience } = req.body;
-
-    const newRegistration = new Registration({
-      name,
-      email,
-      phone,
-      danceStyle,
-      experience,
-    });
-
+    const newRegistration = new Registration(req.body);
     await newRegistration.save();
     res.status(201).json({ message: "Registration successful" });
   } catch (error) {
@@ -60,7 +54,7 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-// ✅ GET all registrations
+// Fetch all registrations (for admin)
 app.get("/api/registrations", async (req, res) => {
   try {
     const registrations = await Registration.find().sort({ date: -1 });
@@ -71,32 +65,9 @@ app.get("/api/registrations", async (req, res) => {
   }
 });
 
-// Serve frontend (React build)
+// ===== 🪩 Serve React Frontend =====
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-app.use(express.static(path.join(__dirname, "client", "build")));
-
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client", "build", "index.html"));
-});
-
-// ✅ Start the server
-const PORT = process.env.PORT || 5000;
-
-import { fileURLToPath } from "url";
-import { dirname } from "path";
-
-// Serve the React frontend
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-dotenv.config();
-
-app.use(cors());
-app.use(express.json());
-
-// 🧩 Serve React build folder in production
-import { fileURLToPath } from "url";
+const __dirname = dirname(__filename);
 
 const buildPath = path.join(__dirname, "../client/build");
 app.use(express.static(buildPath));
@@ -105,5 +76,6 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(buildPath, "index.html"));
 });
 
+// ===== 🚀 Start Server =====
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
-
