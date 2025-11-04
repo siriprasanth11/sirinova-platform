@@ -1,80 +1,62 @@
-// ===== 📦 Imports =====
+// server/server.js
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
-import { dirname } from "path";
 
-// ===== ⚙️ Config =====
 dotenv.config();
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
-// ===== 🌍 MongoDB Connection =====
+// MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI;
-console.log("MONGO_URI value is:", MONGO_URI);
-
 mongoose
   .connect(MONGO_URI)
   .then(() => console.log("✅ MongoDB Connected"))
   .catch((err) => console.error("MongoDB Error:", err));
 
-// ===== 🧩 Mongoose Schema =====
+// Schema & Model
 const registrationSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  phone: { type: String, required: true },
-  danceStyle: { type: String },
-  experience: { type: String },
+  name: String,
+  email: String,
+  phone: String,
+  danceStyle: String,
+  experience: String,
   date: { type: Date, default: Date.now },
 });
+const Registration = mongoose.model("Registration", registrationSchema);
 
-const Registration =
-  mongoose.models.Registration || mongoose.model("Registration", registrationSchema);
-
-// ===== 🧠 Routes =====
-
-// Health check
+// Routes
 app.get("/", (req, res) => {
   res.send("SiriNova backend is running!");
 });
 
-// Save new registration
 app.post("/api/register", async (req, res) => {
   try {
-    const newRegistration = new Registration(req.body);
-    await newRegistration.save();
+    const newReg = new Registration(req.body);
+    await newReg.save();
     res.status(201).json({ message: "Registration successful" });
-  } catch (error) {
-    console.error("Error saving registration:", error);
-    res.status(500).json({ message: "Error submitting form. Please try again." });
+  } catch (err) {
+    res.status(500).json({ message: "Error submitting form." });
   }
 });
 
-// Fetch all registrations (for admin)
-app.get("/api/registrations", async (req, res) => {
-  try {
-    const registrations = await Registration.find().sort({ date: -1 });
-    res.status(200).json(registrations);
-  } catch (error) {
-    console.error("Error fetching registrations:", error);
-    res.status(500).json({ message: "Failed to fetch registrations" });
-  }
-});
-
-// ✅ Serve React frontend (production build)
+// --- Serve Frontend ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const clientPath = path.resolve(__dirname, "../client/build");
 
-app.use(express.static(clientPath));
+// Serve static build folder
+app.use(express.static(path.join(__dirname, "../client/build")));
+
 app.get("*", (req, res) => {
-  res.sendFile(path.join(clientPath, "index.html"));
+  res.sendFile(path.join(__dirname, "../client/build", "index.html"));
 });
 
-// ===== 🚀 Start Server =====
+// --- Start Server ---
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
