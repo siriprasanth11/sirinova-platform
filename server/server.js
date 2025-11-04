@@ -65,15 +65,14 @@ app.get("/api/registrations", async (req, res) => {
   }
 });
 
-// ===== 🪩 Serve React Frontend =====
+// ✅ Serve React frontend (production build)
 const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = path.dirname(__filename);
+const clientPath = path.resolve(__dirname, "../client/build");
 
-const buildPath = path.join(__dirname, "../client/build");
-app.use(express.static(buildPath));
-
+app.use(express.static(clientPath));
 app.get("*", (req, res) => {
-  res.sendFile(path.join(buildPath, "index.html"));
+  res.sendFile(path.join(clientPath, "index.html"));
 });
 
 // ===== 🚀 Start Server =====
