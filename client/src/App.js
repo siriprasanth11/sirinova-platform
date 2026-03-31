@@ -1,8 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 
 function App() {
   const [showMainPage, setShowMainPage] = useState(false);
+  const [eventDetails, setEventDetails] = useState({
+  venue: "",
+  date: "",
+  time: "",
+});
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -10,6 +15,20 @@ function App() {
     danceStyle: "",
     experience: "",
   });
+
+  useEffect(() => {
+  const fetchEvent = async () => {
+    try {
+      const res = await fetch("/event.json");
+      const data = await res.json();
+      setEventDetails(data);
+    } catch (err) {
+      console.error("Error loading event config:", err);
+    }
+  };
+
+  fetchEvent();
+}, []);
 
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -39,6 +58,9 @@ function App() {
       alert("Server error. Please check the backend connection.");
     }
   };
+
+  const isEventReady =
+  eventDetails.venue && eventDetails.date && eventDetails.time;
 
   return (
     <div className="App">
@@ -97,17 +119,23 @@ function App() {
 
           {/* Event Details */}
           <section className="card event-card">
-            <h2>Upcoming Showcase Event</h2>
-            <div className="event-details">
-              <p><strong>📍 Venue:</strong> Charlotte Performing Arts Center</p>
-              <p><strong>📅 Date:</strong> December 15, 2025</p>
-              <p><strong>🕖 Time:</strong> 6:00 PM – 9:30 PM</p>
-              <p className="event-note">
-                Join us for an evening of rhythm, creativity, and community where choreographers
-                and dancers bring their stories to life on stage.
-              </p>
-            </div>
-          </section>
+  <h2>Upcoming Showcase Event</h2>
+
+  {!isEventReady ? (
+    <div className="coming-soon">
+      <h3 className="coming-text">✨ Coming Soon ✨</h3>
+      <p className="coming-subtext">
+        We're working on something amazing. Stay tuned for event details!
+      </p>
+    </div>
+  ) : (
+    <div className="event-details">
+      <p><strong>📍 Venue:</strong> {eventDetails.venue}</p>
+      <p><strong>📅 Date:</strong> {eventDetails.date}</p>
+      <p><strong>🕖 Time:</strong> {eventDetails.time}</p>
+    </div>
+  )}
+</section>
 
           {/* Registration */}
           <section className="card registration-card">
