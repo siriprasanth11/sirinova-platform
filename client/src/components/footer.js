@@ -7,7 +7,7 @@
   borderTop: "1px solid #222"
 }}>
   <p>📍 SiriNova Performing Arts Collective</p>
-  <p>📞 Contact: <strong>704-620-2017</strong></p>
+  <p> Contact: <strong>sirinova.clt@gmail.com</strong></p>
   <p style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}>
     © {new Date().getFullYear()} SiriNova. All Rights Reserved.
   </p>
