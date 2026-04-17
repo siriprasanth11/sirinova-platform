@@ -1,71 +1,59 @@
 body {
   margin: 0;
-  font-family: Arial;
-  background: #0d0d0d;
+  font-family: 'Segoe UI', sans-serif;
+  background: #0a0a0a;
   color: white;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
-  padding: 15px 40px;
-  background: black;
+  padding: 20px 40px;
 }
 
-.logo {
+.logo-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+.brand {
   color: gold;
   font-weight: bold;
 }
 
 .hero {
   text-align: center;
-  padding: 80px;
-  background: linear-gradient(#000, #222);
+  padding: 100px 20px;
+  background: radial-gradient(circle, #111, #000);
 }
 
-.card {
+.section {
   max-width: 900px;
-  margin: 20px auto;
-  padding: 20px;
-  background: #111;
-  border-radius: 10px;
+  margin: 40px auto;
 }
 
-input {
+.form input {
+  display: block;
   width: 100%;
   margin: 10px 0;
   padding: 10px;
 }
 
-.cta {
+button {
   background: gold;
   border: none;
-  padding: 10px;
+  padding: 10px 15px;
   cursor: pointer;
 }
 
-.success {
-  background: green;
-  padding: 10px;
-}
-
-.error {
-  color: red;
-}
-
-.logout {
-  background: red;
-  padding: 8px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th, td {
-  border: 1px solid #333;
-  padding: 10px;
+.event-box {
+  background: #111;
+  padding: 15px;
+  border-radius: 8px;
 }
