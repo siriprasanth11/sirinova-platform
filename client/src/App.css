@@ -1,59 +1,166 @@
+/* ROOT VARIABLES */
+:root {
+  --gold: #FFD700;
+  --dark: #050505;
+  --card: rgba(255,255,255,0.05);
+  --glass: rgba(255,255,255,0.06);
+  --muted: #aaa;
+}
+
+/* GLOBAL */
 body {
   margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #0a0a0a;
+  font-family: "Poppins", sans-serif;
+  background: radial-gradient(circle at top, #0a0a0a, #000);
   color: white;
+  overflow-x: hidden;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 40px;
-}
-
-.logo-wrap {
+/* LOGO SCREEN */
+.logo-screen {
+  height: 100vh;
   display: flex;
   align-items: center;
-}
-
-.logo-img {
-  height: 50px;
-  width: auto;
-  object-fit: contain;
-}
-
-.brand {
-  color: gold;
-  font-weight: bold;
-}
-
-.hero {
-  text-align: center;
-  padding: 100px 20px;
-  background: radial-gradient(circle, #111, #000);
-}
-
-.section {
-  max-width: 900px;
-  margin: 40px auto;
-}
-
-.form input {
-  display: block;
-  width: 100%;
-  margin: 10px 0;
-  padding: 10px;
-}
-
-button {
-  background: gold;
-  border: none;
-  padding: 10px 15px;
+  justify-content: center;
+  background: radial-gradient(circle, rgba(255,215,0,0.1), #000);
+  animation: fadeIn 1s ease;
   cursor: pointer;
 }
 
-.event-box {
-  background: #111;
-  padding: 15px;
+.logo-screen img {
+  width: 260px;
+  animation: zoomPulse 2.5s infinite ease-in-out;
+}
+
+@keyframes zoomPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+/* MAIN */
+.main-page {
+  padding: 2rem;
+  animation: fadeUp 1s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* HEADER */
+.App-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.sirinova-logo {
+  width: 120px;
+  filter: drop-shadow(0 0 15px gold);
+}
+
+.gold-gradient {
+  font-size: 2.5rem;
+  font-family: "Playfair Display", serif;
+  background: linear-gradient(90deg, #FFD700, #fff2a8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.subtagline {
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  margin: 50px 0;
+}
+
+.hero h1 {
+  font-size: 3rem;
+}
+
+.hero p {
+  color: var(--muted);
+}
+
+/* CARDS */
+.card {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 25px;
+  border-radius: 15px;
+  backdrop-filter: blur(12px);
+  background: var(--glass);
+  border: 1px solid rgba(255,215,0,0.1);
+  box-shadow: 0 0 40px rgba(255,215,0,0.05);
+  animation: fadeUp 0.8s ease;
+}
+
+/* FORM */
+.registration-form input {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
   border-radius: 8px;
+  border: none;
+  background: #111;
+  color: white;
+}
+
+/* BUTTON */
+.cta {
+  background: linear-gradient(90deg, #FFD700, #ffcc00);
+  border: none;
+  padding: 12px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 20px gold;
+}
+
+/* COMING SOON */
+.coming-text {
+  text-align: center;
+  font-size: 1.8rem;
+  color: gold;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+/* TABLE */
+table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 8px;
+  border-bottom: 1px solid #333;
+}
+
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  color: var(--muted);
+}
+
+/* FADE IN */
+@keyframes fadeIn {
+  from {opacity:0}
+  to {opacity:1}
 }

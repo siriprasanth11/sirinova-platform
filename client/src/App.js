@@ -5,165 +5,131 @@ const API_BASE = "https://sirinova-platform.onrender.com";
 const ADMIN_PASSWORD = "admin123";
 
 function App() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    danceStyle: "",
-    experience: "",
-  });
-
+  const [showMain, setShowMain] = useState(false);
   const [eventDetails, setEventDetails] = useState({});
-  const [registrations, setRegistrations] = useState([]);
-
+  const [formData, setFormData] = useState({});
   const [isAdmin, setIsAdmin] = useState(false);
-  const [passwordInput, setPasswordInput] = useState("");
+  const [password, setPassword] = useState("");
 
-  // Fetch event
   useEffect(() => {
     fetch(`${API_BASE}/api/event`)
-      .then((res) => res.json())
-      .then((data) => setEventDetails(data || {}));
+      .then(res => res.json())
+      .then(data => setEventDetails(data || {}));
   }, []);
 
-  const fetchRegistrations = async () => {
-    const res = await fetch(`${API_BASE}/api/registrations`);
-    const data = await res.json();
-    setRegistrations(data);
-  };
-
-  useEffect(() => {
-    if (isAdmin) fetchRegistrations();
-  }, [isAdmin]);
-
-  const handleSubmit = async (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
-
     await fetch(`${API_BASE}/api/register`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(formData)
     });
-
-    alert("Registered successfully!");
-    setFormData({
-      name: "",
-      email: "",
-      phone: "",
-      danceStyle: "",
-      experience: "",
-    });
+    alert("🎉 You're in!");
   };
 
   const updateEvent = async () => {
     await fetch(`${API_BASE}/api/event`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(eventDetails),
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify(eventDetails)
     });
-
-    alert("Event updated!");
+    alert("Updated!");
   };
 
   const login = () => {
-    if (passwordInput === ADMIN_PASSWORD) setIsAdmin(true);
+    if(password === ADMIN_PASSWORD) setIsAdmin(true);
     else alert("Wrong password");
   };
 
+  /* LOGO SCREEN */
+  if (!showMain) {
+    return (
+      <div className="logo-screen" onClick={() => setShowMain(true)}>
+        <img src="/sirinova-logo.png" alt="logo" />
+      </div>
+    );
+  }
+
   return (
-    <div className="app">
+    <div className="main-page">
 
       {/* HEADER */}
-      <header className="header">
-        <div className="logo-wrap">
-          <img src="/sirinova-logo.png" alt="SiriNova Logo" className="logo-img" />
-          <span className="brand">SiriNova</span>
-        </div>
-        <nav>
-          <a href="#about">About</a>
-          <a href="#event">Event</a>
-          <a href="#register">Register</a>
-        </nav>
+      <header className="App-header">
+        <img src="/sirinova-logo.png" className="sirinova-logo" alt="logo"/>
+        <h1 className="gold-gradient">SiriNova</h1>
+        <p className="subtagline">Where Talent Meets the Stage</p>
       </header>
 
       {/* HERO */}
       <section className="hero">
-        <h1>Where Talent Meets the Stage</h1>
-        <p>Showcase your choreography. Perform. Get discovered.</p>
+        <h1>Showcase Your Talent</h1>
+        <p>Join a premium stage for dancers & choreographers</p>
       </section>
 
       {/* ABOUT */}
-      <section id="about" className="section">
-        <h2>About SiriNova</h2>
+      <section className="card">
+        <h2>About</h2>
         <p>
-          SiriNova is a curated platform for dancers and choreographers to
-          showcase their work on a professional stage and connect with the
-          creative community.
+          SiriNova is a curated platform where talent meets opportunity —
+          designed to elevate dancers and choreographers.
         </p>
       </section>
 
       {/* EVENT */}
-      <section id="event" className="section">
-        <h2>Upcoming Event</h2>
+      <section className="card">
+        <h2>Event</h2>
 
         {!eventDetails?.venue ? (
-          <p className="coming">✨ Details Coming Soon ✨</p>
+          <div className="coming-text">✨ Coming Soon ✨</div>
         ) : (
-          <div className="event-box">
-            <p><strong>Venue:</strong> {eventDetails.venue}</p>
-            <p><strong>Date:</strong> {eventDetails.date}</p>
-            <p><strong>Time:</strong> {eventDetails.time}</p>
-          </div>
+          <>
+            <p><b>Venue:</b> {eventDetails.venue}</p>
+            <p><b>Date:</b> {eventDetails.date}</p>
+            <p><b>Time:</b> {eventDetails.time}</p>
+          </>
         )}
       </section>
 
       {/* REGISTER */}
-      <section id="register" className="section">
-        <h2>Join the Experience</h2>
+      <section className="card">
+        <h2>Register</h2>
 
-        <form className="form" onSubmit={handleSubmit}>
-          <input name="name" placeholder="Name" onChange={(e)=>setFormData({...formData,name:e.target.value})} required />
-          <input name="email" placeholder="Email" onChange={(e)=>setFormData({...formData,email:e.target.value})} required />
-          <input name="phone" placeholder="Phone" onChange={(e)=>setFormData({...formData,phone:e.target.value})} required />
-          <input name="danceStyle" placeholder="Dance Style" onChange={(e)=>setFormData({...formData,danceStyle:e.target.value})} />
-          <input name="experience" placeholder="Experience" onChange={(e)=>setFormData({...formData,experience:e.target.value})} />
-          <button>Register</button>
+        <form className="registration-form" onSubmit={submitForm}>
+          <input placeholder="Name" onChange={e=>setFormData({...formData,name:e.target.value})}/>
+          <input placeholder="Email" onChange={e=>setFormData({...formData,email:e.target.value})}/>
+          <input placeholder="Phone" onChange={e=>setFormData({...formData,phone:e.target.value})}/>
+          <input placeholder="Dance Style" onChange={e=>setFormData({...formData,danceStyle:e.target.value})}/>
+          <input placeholder="Experience" onChange={e=>setFormData({...formData,experience:e.target.value})}/>
+          <button className="cta">Register</button>
         </form>
       </section>
 
       {/* ADMIN LOGIN */}
       {!isAdmin && (
-        <section className="section">
+        <section className="card">
           <h3>Admin Access</h3>
-          <input type="password" placeholder="Password" onChange={(e)=>setPasswordInput(e.target.value)} />
-          <button onClick={login}>Login</button>
+          <input type="password" placeholder="Password" onChange={e=>setPassword(e.target.value)} />
+          <button className="cta" onClick={login}>Login</button>
         </section>
       )}
 
       {/* ADMIN PANEL */}
       {isAdmin && (
-        <section className="section admin">
+        <section className="card">
           <h2>Admin Dashboard</h2>
 
-          <input placeholder="Venue" value={eventDetails.venue || ""} onChange={(e)=>setEventDetails({...eventDetails,venue:e.target.value})}/>
-          <input placeholder="Date" value={eventDetails.date || ""} onChange={(e)=>setEventDetails({...eventDetails,date:e.target.value})}/>
-          <input placeholder="Time" value={eventDetails.time || ""} onChange={(e)=>setEventDetails({...eventDetails,time:e.target.value})}/>
+          <input placeholder="Venue" onChange={e=>setEventDetails({...eventDetails,venue:e.target.value})}/>
+          <input placeholder="Date" onChange={e=>setEventDetails({...eventDetails,date:e.target.value})}/>
+          <input placeholder="Time" onChange={e=>setEventDetails({...eventDetails,time:e.target.value})}/>
 
-          <button onClick={updateEvent}>Update Event</button>
-
-          <h3>Registrations</h3>
-          <table>
-            <tbody>
-              {registrations.map(r => (
-                <tr key={r._id}>
-                  <td>{r.name}</td>
-                  <td>{r.email}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <button className="cta" onClick={updateEvent}>Update Event</button>
         </section>
       )}
+
+      {/* FOOTER */}
+      <div className="footer">
+        © 2026 SiriNova • All Rights Reserved
+      </div>
 
     </div>
   );
