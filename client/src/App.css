@@ -1,14 +1,26 @@
 body {
   margin: 0;
-  font-family: "Poppins", sans-serif;
+  font-family: Arial;
   background: #0d0d0d;
-  color: #fff;
+  color: white;
 }
 
-.title {
-  text-align: center;
-  margin-top: 20px;
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px 40px;
+  background: black;
+}
+
+.logo {
   color: gold;
+  font-weight: bold;
+}
+
+.hero {
+  text-align: center;
+  padding: 80px;
+  background: linear-gradient(#000, #222);
 }
 
 .card {
@@ -17,61 +29,43 @@ body {
   padding: 20px;
   background: #111;
   border-radius: 10px;
-  border: 1px solid #222;
 }
 
 input {
-  display: block;
   width: 100%;
   margin: 10px 0;
   padding: 10px;
-  border-radius: 6px;
-  border: none;
-  background: #222;
-  color: white;
 }
 
 .cta {
   background: gold;
   border: none;
   padding: 10px;
-  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
-}
-
-.cta:hover {
-  background: #ffd700;
 }
 
 .success {
-  background: #1a3;
+  background: green;
   padding: 10px;
-  border-radius: 6px;
+}
+
+.error {
+  color: red;
+}
+
+.logout {
+  background: red;
+  padding: 8px;
   margin-bottom: 10px;
+  cursor: pointer;
 }
 
-.coming-soon {
-  text-align: center;
-}
-
-/* 🔥 TABLE FIXED */
-.admin-table {
+table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 10px;
 }
 
-.admin-table th,
-.admin-table td {
-  border: 1px solid #444;
+th, td {
+  border: 1px solid #333;
   padding: 10px;
-}
-
-.admin-table th {
-  background: #222;
-}
-
-.admin-table tr:nth-child(even) {
-  background: #1a1a1a;
 }
