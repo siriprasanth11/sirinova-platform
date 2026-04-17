@@ -185,7 +185,7 @@ function App() {
           {/* Footer */}
           <footer className="site-footer">
             <div className="footer-top">Contact SiriNova</div>
-            <div>📞 +1 (704) 620-2017 • 📧 info@sirinova.com</div>
+            <div>sirinova.clt@gmail.com</div>
             <div className="copyright">
               © {new Date().getFullYear()} SiriNova. All Rights Reserved.
             </div>
