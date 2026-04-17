@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 
-const API_BASE = "https://sirinova-platform.onrender.com"; // 🔥 UPDATE THIS
+const API_BASE = "https://sirinova-platform.onrender.com";
 
 function App() {
   const [formData, setFormData] = useState({
@@ -13,28 +13,46 @@ function App() {
   });
 
   const [eventDetails, setEventDetails] = useState({});
+  const [registrations, setRegistrations] = useState([]);
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // 🔹 Fetch event details from backend
- useEffect(() => {
-  fetch(`${API_BASE}/api/event`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data && data.venue) {
-        setEventDetails(data);
-      } else {
-        setEventDetails({});
-      }
-    })
-    .catch((err) => console.error("Error fetching event:", err));
-}, []);
+  // 🔹 Fetch event details
+  useEffect(() => {
+    fetch(`${API_BASE}/api/event`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.venue) {
+          setEventDetails(data);
+        } else {
+          setEventDetails({});
+        }
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
-  // 🔹 Handle input change
+  // 🔹 Fetch registrations
+  const fetchRegistrations = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/registrations`);
+      const data = await res.json();
+      setRegistrations(data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchRegistrations();
+  }, []);
+
+  // 🔹 Handle form input
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // 🔹 Submit registration
+  // 🔹 Submit form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -49,6 +67,7 @@ function App() {
 
       if (res.ok) {
         setSuccess(true);
+
         setFormData({
           name: "",
           email: "",
@@ -56,16 +75,19 @@ function App() {
           danceStyle: "",
           experience: "",
         });
+
+        // ✅ Refresh registrations instantly
+        fetchRegistrations();
       } else {
-        alert("Something went wrong. Please try again.");
+        alert("Something went wrong");
       }
     } catch (err) {
       console.error(err);
-      alert("Server error. Try again later.");
+      alert("Server error");
     }
   };
 
-  // 🔹 Update event (admin)
+  // 🔹 Update event
   const updateEvent = async () => {
     try {
       await fetch(`${API_BASE}/api/event`, {
@@ -79,13 +101,13 @@ function App() {
       alert("Event Updated Successfully!");
     } catch (err) {
       console.error(err);
-      alert("Failed to update event");
+      alert("Update failed");
     }
   };
 
   return (
     <div className="App">
-      <h1>SiriNova 🎭</h1>
+      <h1 className="title">SiriNova 🎭</h1>
 
       {/* 🔥 Event Section */}
       <section className="card">
@@ -104,15 +126,11 @@ function App() {
         )}
       </section>
 
-      {/* 🔥 Registration Form */}
+      {/* 🔥 Registration */}
       <section className="card">
-        <h2>🎟️ Early Access Registration</h2>
+        <h2>🎟️ Register</h2>
 
-        {success && (
-          <div className="success-message">
-            🎉 You're in! We'll notify you soon.
-          </div>
-        )}
+        {success && <div className="success">🎉 Registered successfully!</div>}
 
         <form onSubmit={handleSubmit}>
           <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
@@ -120,14 +138,13 @@ function App() {
           <input name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required />
           <input name="danceStyle" placeholder="Dance Style" value={formData.danceStyle} onChange={handleChange} />
           <input name="experience" placeholder="Experience" value={formData.experience} onChange={handleChange} />
-
-          <button type="submit" className="cta">Register</button>
+          <button className="cta">Register</button>
         </form>
       </section>
 
-      {/* 🔥 Admin Section */}
+      {/* 🔥 Admin - Event */}
       <section className="card">
-        <h2>⚙️ Admin - Update Event</h2>
+        <h2>⚙️ Admin - Event</h2>
 
         <input
           placeholder="Venue"
@@ -156,6 +173,40 @@ function App() {
         <button className="cta" onClick={updateEvent}>
           Update Event
         </button>
+      </section>
+
+      {/* 🔥 Admin - Registrations */}
+      <section className="card">
+        <h2>📊 Registrations</h2>
+
+        {loading ? (
+          <p>Loading...</p>
+        ) : registrations.length === 0 ? (
+          <p>No registrations yet</p>
+        ) : (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Dance Style</th>
+                <th>Experience</th>
+              </tr>
+            </thead>
+            <tbody>
+              {registrations.map((user) => (
+                <tr key={user._id}>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>{user.phone}</td>
+                  <td>{user.danceStyle}</td>
+                  <td>{user.experience}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </section>
     </div>
   );
