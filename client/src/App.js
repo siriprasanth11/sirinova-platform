@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 
+const API_BASE = "https://sirinova-platform.onrender.com"; // 🔥 UPDATE THIS
+
 function App() {
-  const [showMainPage, setShowMainPage] = useState(false);
-  const [eventDetails, setEventDetails] = useState({
-  venue: "",
-  date: "",
-  time: "",
-});
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,33 +12,43 @@ function App() {
     experience: "",
   });
 
-  useEffect(() => {
-  const fetchEvent = async () => {
-    try {
-      const res = await fetch("/event.json");
-      const data = await res.json();
-      setEventDetails(data);
-    } catch (err) {
-      console.error("Error loading event config:", err);
-    }
-  };
+  const [eventDetails, setEventDetails] = useState({});
+  const [success, setSuccess] = useState(false);
 
-  fetchEvent();
+  // 🔹 Fetch event details from backend
+ useEffect(() => {
+  fetch(`${API_BASE}/api/event`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data && data.venue) {
+        setEventDetails(data);
+      } else {
+        setEventDetails({});
+      }
+    })
+    .catch((err) => console.error("Error fetching event:", err));
 }, []);
 
-  const handleChange = (e) =>
+  // 🔹 Handle input change
+  const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
+  // 🔹 Submit registration
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
-      const resp = await fetch("/api/register", {
+      const res = await fetch(`${API_BASE}/api/register`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(formData),
       });
-      if (resp.ok) {
-        alert("Registration successful! 🎉");
+
+      if (res.ok) {
+        setSuccess(true);
         setFormData({
           name: "",
           email: "",
@@ -51,147 +57,106 @@ function App() {
           experience: "",
         });
       } else {
-        alert("Error submitting form. Please try again.");
+        alert("Something went wrong. Please try again.");
       }
     } catch (err) {
       console.error(err);
-      alert("Server error. Please check the backend connection.");
+      alert("Server error. Try again later.");
     }
   };
 
-  const isEventReady =
-  eventDetails.venue && eventDetails.date && eventDetails.time;
+  // 🔹 Update event (admin)
+  const updateEvent = async () => {
+    try {
+      await fetch(`${API_BASE}/api/event`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(eventDetails),
+      });
+
+      alert("Event Updated Successfully!");
+    } catch (err) {
+      console.error(err);
+      alert("Failed to update event");
+    }
+  };
 
   return (
     <div className="App">
-      {!showMainPage ? (
-        <div
-          className="logo-screen"
-          onClick={() => setShowMainPage(true)}
-          title="Click to enter SiriNova"
-        >
-          <img
-            src="/sirinova-logo.png"
-            alt="SiriNova Logo"
-            className="sirinova-logo-large"
-          />
-        </div>
-      ) : (
-        <div className="main-page fade-in">
-          <header className="App-header">
-            <img
-              src="/sirinova-logo.png"
-              alt="SiriNova Logo"
-              className="sirinova-logo"
-            />
-            <h1 className="gold-gradient">SiriNova</h1>
-            <h2 className="subtagline">
-              Empowering choreographers, dancers, and creators to shine on a global stage.
-            </h2>
-          </header>
+      <h1>SiriNova 🎭</h1>
 
-          {/* About */}
-          <section className="card about-card">
-            <h2>About SiriNova</h2>
-            <p>
-              SiriNova is a creative hub designed to bring together choreographers,
-              dancers, and performance artists under one vibrant digital roof.
-              We believe every movement tells a story, and our mission is to amplify
-              those stories by connecting talented choreographers with opportunities,
-              events, and audiences that truly value their art.
-            </p>
-          </section>
+      {/* 🔥 Event Section */}
+      <section className="card">
+        {!eventDetails?.venue ? (
+          <div className="coming-soon">
+            <h2>✨ Coming Soon ✨</h2>
+            <p>Event details will be announced shortly</p>
+          </div>
+        ) : (
+          <>
+            <h2>Event Details</h2>
+            <p><strong>Venue:</strong> {eventDetails.venue}</p>
+            <p><strong>Date:</strong> {eventDetails.date}</p>
+            <p><strong>Time:</strong> {eventDetails.time}</p>
+          </>
+        )}
+      </section>
 
-          {/* Goal */}
-          <section className="card goal-card">
-            <h2>Our Goal & Intention</h2>
-            <p>
-              Our goal is to build a platform that celebrates creativity, collaboration,
-              and cultural expression. We support choreographers by offering a structured,
-              low-overhead stage for student performances, vendor partnerships, and sponsorships
-              that make shows sustainable and frequent.
-            </p>
-            <p>
-              Whether you're an emerging artist or a seasoned choreographer, SiriNova is your
-              stage to shine — to inspire, teach, and connect through the universal language of dance.
-            </p>
-          </section>
+      {/* 🔥 Registration Form */}
+      <section className="card">
+        <h2>🎟️ Early Access Registration</h2>
 
-          {/* Event Details */}
-          <section className="card event-card">
-  <h2>Upcoming Showcase Event</h2>
+        {success && (
+          <div className="success-message">
+            🎉 You're in! We'll notify you soon.
+          </div>
+        )}
 
-  {!isEventReady ? (
-    <div className="coming-soon">
-      <h3 className="coming-text">✨ Coming Soon ✨</h3>
-      <p className="coming-subtext">
-        We're working on something amazing. Stay tuned for event details!
-      </p>
-    </div>
-  ) : (
-    <div className="event-details">
-      <p><strong>📍 Venue:</strong> {eventDetails.venue}</p>
-      <p><strong>📅 Date:</strong> {eventDetails.date}</p>
-      <p><strong>🕖 Time:</strong> {eventDetails.time}</p>
-    </div>
-  )}
-</section>
+        <form onSubmit={handleSubmit}>
+          <input name="name" placeholder="Name" value={formData.name} onChange={handleChange} required />
+          <input name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
+          <input name="phone" placeholder="Phone" value={formData.phone} onChange={handleChange} required />
+          <input name="danceStyle" placeholder="Dance Style" value={formData.danceStyle} onChange={handleChange} />
+          <input name="experience" placeholder="Experience" value={formData.experience} onChange={handleChange} />
 
-          {/* Registration */}
-          <section className="card registration-card">
-            <h2>Register as a Choreographer</h2>
-            <form className="registration-form" onSubmit={handleSubmit}>
-              <input
-                name="name"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Full Name"
-                required
-              />
-              <input
-                type="email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="Email Address"
-                required
-              />
-              <input
-                name="phone"
-                value={formData.phone}
-                onChange={handleChange}
-                placeholder="Phone Number"
-                required
-              />
-              <input
-                name="danceStyle"
-                value={formData.danceStyle}
-                onChange={handleChange}
-                placeholder="Dance Style"
-              />
-              <textarea
-                name="experience"
-                value={formData.experience}
-                onChange={handleChange}
-                placeholder="Briefly describe your experience"
-                rows="4"
-              />
-              <button type="submit" className="cta">
-                Register
-              </button>
-            </form>
-          </section>
+          <button type="submit" className="cta">Register</button>
+        </form>
+      </section>
 
-          {/* Footer */}
-          <footer className="site-footer">
-            <div className="footer-top">Contact SiriNova</div>
-            <div>sirinova.clt@gmail.com</div>
-            <div className="copyright">
-              © {new Date().getFullYear()} SiriNova. All Rights Reserved.
-            </div>
-          </footer>
-        </div>
-      )}
+      {/* 🔥 Admin Section */}
+      <section className="card">
+        <h2>⚙️ Admin - Update Event</h2>
+
+        <input
+          placeholder="Venue"
+          value={eventDetails.venue || ""}
+          onChange={(e) =>
+            setEventDetails({ ...eventDetails, venue: e.target.value })
+          }
+        />
+
+        <input
+          placeholder="Date"
+          value={eventDetails.date || ""}
+          onChange={(e) =>
+            setEventDetails({ ...eventDetails, date: e.target.value })
+          }
+        />
+
+        <input
+          placeholder="Time"
+          value={eventDetails.time || ""}
+          onChange={(e) =>
+            setEventDetails({ ...eventDetails, time: e.target.value })
+          }
+        />
+
+        <button className="cta" onClick={updateEvent}>
+          Update Event
+        </button>
+      </section>
     </div>
   );
 }
