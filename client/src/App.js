@@ -60,20 +60,28 @@ function App() {
         <p className="subtagline">Where Talent Meets the Stage</p>
       </header>
 
-      {/* HERO */}
-      <section className="hero">
-        <h1>Showcase Your Talent</h1>
-        <p>Join a premium stage for dancers & choreographers</p>
-      </section>
-
       {/* ABOUT */}
       <section className="card">
         <h2>About</h2>
         <p>
-          SiriNova is a curated platform where talent meets opportunity —
-          designed to elevate dancers and choreographers.
+          SiriNova is a creative hub designed to bring together choreographers, dancers, and performance artists under one vibrant digital roof.
+    We believe every movement tells a story, and our mission is to amplify those stories by connecting talented choreographers with opportunities,
+    events, and audiences that truly value their art.
         </p>
-      </section>
+
+        <h3 className="section-subtitle">Our Goal & Intention</h3>
+
+  <p>
+    Our goal is to build a platform that celebrates creativity, collaboration, and cultural expression.
+    We support choreographers by offering a structured, low-overhead stage for student performances,
+    vendor partnerships, and sponsorships that make shows sustainable and frequent.
+  </p>
+
+  <p>
+    Whether you're an emerging artist or a seasoned choreographer, SiriNova is your stage to shine —
+    to inspire, teach, and connect through the universal language of dance.
+  </p>
+</section>      
 
       {/* EVENT */}
       <section className="card">
