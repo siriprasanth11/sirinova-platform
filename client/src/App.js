@@ -10,6 +10,11 @@ function App() {
   const [formData, setFormData] = useState({});
   const [isAdmin, setIsAdmin] = useState(false);
   const [password, setPassword] = useState("");
+  const [registrations, setRegistrations] = useState([]);
+  const logout = () => {
+  setIsAdmin(false);
+  setPassword("");
+};
 
   useEffect(() => {
     fetch(`${API_BASE}/api/event`)
@@ -17,15 +22,34 @@ function App() {
       .then(data => setEventDetails(data || {}));
   }, []);
 
+  useEffect(() => {
+    if (isAdmin) {
+      fetch(`${API_BASE}/api/registrations`)
+        .then(res => res.json())
+        .then(data => setRegistrations(data));
+    }
+  }, [isAdmin]);
+
   const submitForm = async (e) => {
-    e.preventDefault();
-    await fetch(`${API_BASE}/api/register`, {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify(formData)
-    });
-    alert("🎉 You're in!");
-  };
+  e.preventDefault();
+
+  await fetch(`${API_BASE}/api/register`, {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify(formData)
+  });
+
+  alert("🎉 You're in!");
+
+  // ✅ RESET FORM
+  setFormData({
+    name: "",
+    email: "",
+    phone: "",
+    danceStyle: "",
+    experience: ""
+  });
+};
 
   const updateEvent = async () => {
     await fetch(`${API_BASE}/api/event`, {
@@ -35,6 +59,8 @@ function App() {
     });
     alert("Updated!");
   };
+
+
 
   const login = () => {
     if(password === ADMIN_PASSWORD) setIsAdmin(true);
@@ -103,13 +129,33 @@ function App() {
         <h2>Register</h2>
 
         <form className="registration-form" onSubmit={submitForm}>
-          <input placeholder="Name" onChange={e=>setFormData({...formData,name:e.target.value})}/>
-          <input placeholder="Email" onChange={e=>setFormData({...formData,email:e.target.value})}/>
-          <input placeholder="Phone" onChange={e=>setFormData({...formData,phone:e.target.value})}/>
-          <input placeholder="Dance Style" onChange={e=>setFormData({...formData,danceStyle:e.target.value})}/>
-          <input placeholder="Experience" onChange={e=>setFormData({...formData,experience:e.target.value})}/>
-          <button className="cta">Register</button>
-        </form>
+  <input
+    value={formData.name || ""}
+    placeholder="Name"
+    onChange={e=>setFormData({...formData,name:e.target.value})}
+  />
+  <input
+    value={formData.email || ""}
+    placeholder="Email"
+    onChange={e=>setFormData({...formData,email:e.target.value})}
+  />
+  <input
+    value={formData.phone || ""}
+    placeholder="Phone"
+    onChange={e=>setFormData({...formData,phone:e.target.value})}
+  />
+  <input
+    value={formData.danceStyle || ""}
+    placeholder="Dance Style"
+    onChange={e=>setFormData({...formData,danceStyle:e.target.value})}
+  />
+  <input
+    value={formData.experience || ""}
+    placeholder="Experience"
+    onChange={e=>setFormData({...formData,experience:e.target.value})}
+  />
+  <button className="cta">Register</button>
+</form>
       </section>
 
       {/* ADMIN LOGIN */}
@@ -119,21 +165,65 @@ function App() {
           <input type="password" placeholder="Password" onChange={e=>setPassword(e.target.value)} />
           <button className="cta" onClick={login}>Login</button>
         </section>
-      )}
-
+        )}
+      
       {/* ADMIN PANEL */}
       {isAdmin && (
-        <section className="card">
-          <h2>Admin Dashboard</h2>
+  <section className="card">
+    <h2>Admin Dashboard</h2>
 
-          <input placeholder="Venue" onChange={e=>setEventDetails({...eventDetails,venue:e.target.value})}/>
-          <input placeholder="Date" onChange={e=>setEventDetails({...eventDetails,date:e.target.value})}/>
-          <input placeholder="Time" onChange={e=>setEventDetails({...eventDetails,time:e.target.value})}/>
+    <button className="logout-btn" onClick={logout}>
+      Logout
+    </button>
 
-          <button className="cta" onClick={updateEvent}>Update Event</button>
-        </section>
-      )}
+    {/* EVENT UPDATE */}
+    <input
+      value={eventDetails.venue || ""}
+      placeholder="Venue"
+      onChange={e => setEventDetails({...eventDetails, venue: e.target.value})}
+    />
+    <input
+      value={eventDetails.date || ""}
+      placeholder="Date"
+      onChange={e => setEventDetails({...eventDetails, date: e.target.value})}
+    />
+    <input
+      value={eventDetails.time || ""}
+      placeholder="Time"
+      onChange={e => setEventDetails({...eventDetails, time: e.target.value})}
+    />
 
+    <button className="cta" onClick={updateEvent}>
+      Update Event
+    </button>
+
+    {/* REGISTRATIONS TABLE */}
+    <h3 style={{marginTop:"20px"}}>Registered Participants</h3>
+
+    <table className="admin-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Style</th>
+          <th>Experience</th>
+        </tr>
+      </thead>
+      <tbody>
+        {registrations.map((user) => (
+          <tr key={user._id}>
+            <td>{user.name}</td>
+            <td>{user.email}</td>
+            <td>{user.phone}</td>
+            <td>{user.danceStyle}</td>
+            <td>{user.experience}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+)}
       {/* FOOTER */}
       <div className="footer">
         © 2026 SiriNova • All Rights Reserved

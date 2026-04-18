@@ -196,3 +196,29 @@ td {
   color: var(--gold);
   font-family: "Playfair Display", serif;
 }
+
+.admin-table {
+  width: 100%;
+  margin-top: 15px;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid #333;
+  padding: 10px;
+}
+
+.admin-table th {
+  background: #111;
+}
+
+.logout-btn {
+  background: crimson;
+  border: none;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  cursor: pointer;
+  color: white;
+  border-radius: 6px;
+}
