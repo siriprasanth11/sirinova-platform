@@ -86,6 +86,15 @@ function App() {
         <p className="subtagline">Where Talent Meets the Stage</p>
       </header>
 
+      <section className="hero">
+  <h1 className="hero-title">Where Every Step Tells a Story</h1>
+
+  <p className="hero-subtitle">
+    A creative platform connecting choreographers, dancers, and performance artists
+    to opportunities, audiences, and a stage that values their art.
+  </p>
+</section>
+
       {/* ABOUT */}
       <section className="card">
         <h2>About</h2>

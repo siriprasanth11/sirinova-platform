@@ -98,20 +98,47 @@ body {
   font-style: italic;
 }
 
-/* HERO */
+/* HERO SECTION */
 .hero {
   text-align: center;
-  margin: 50px 0;
+  margin: 60px auto 40px;
+  max-width: 900px;
+  animation: fadeUp 1s ease;
 }
 
-.hero h1 {
+.hero-title {
   font-size: 3rem;
+  font-family: "Playfair Display", serif;
+  background: linear-gradient(90deg, #FFD700, #fff2a8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 20px;
 }
 
-.hero p {
-  color: var(--muted);
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #ccc;
+  line-height: 1.7;
+  margin-bottom: 15px;
 }
 
+.hero-tagline {
+  font-size: 0.95rem;
+  color: #FFD700;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+}
 /* CARDS */
 .card {
   max-width: 900px;
