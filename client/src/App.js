@@ -94,18 +94,6 @@ function App() {
   </p>
 </section>
 
-<button className="cta hero-cta">
-  Register Now
-</button>
-
-<section className="card" id="register"></section>
-<button
-  className="cta hero-cta"
-  onClick={() => document.getElementById("register").scrollIntoView({ behavior: "smooth" })}
->
-  Register Now
-</button>
-
       {/* ABOUT */}
       <section className="card">
         <h2>About</h2>
