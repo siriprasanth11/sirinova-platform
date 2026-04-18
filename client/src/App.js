@@ -83,8 +83,7 @@ function App() {
       <header className="App-header">
         <img src="/sirinova-logo.png" className="sirinova-logo" alt="logo"/>
         <h1 className="gold-gradient">SiriNova</h1>
-        <p className="subtagline">Where Talent Meets the Stage</p>
-      </header>
+              </header>
 
       <section className="hero">
   <h1 className="hero-title">Where Every Step Tells a Story</h1>

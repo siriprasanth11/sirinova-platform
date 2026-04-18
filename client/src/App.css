@@ -107,7 +107,7 @@ body {
 }
 
 .hero-title {
-  font-size: 3rem;
+  font-size: 2rem;
   font-family: "Playfair Display", serif;
   background: linear-gradient(90deg, #FFD700, #fff2a8);
   -webkit-background-clip: text;
