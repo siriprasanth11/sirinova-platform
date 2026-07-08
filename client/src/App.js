@@ -235,8 +235,8 @@ function App() {
       <section className="card">
         <h2>About</h2>
         <p>
-          SiriNova is a group dance competition bringing choreographers, dancers, and performancers together on one stage. We believe every movement tells a story, and our mission is
-          to amplify those stories by giving choreographers a platform, an audience, and the recognition
+          SiriNova is a group dance competition bringing choreographers, dancers, and performancers together on one stage. 
+          We believe every movement tells a story, and our mission is to amplify those stories by giving choreographers a platform, an audience, and the recognition
           their art deserves.
         </p>
 
@@ -271,7 +271,8 @@ function App() {
             <span className="why-icon">⚖️</span>
             <div>
               <strong>Judged fairly</strong>
-              <p>Our judges are carefully selected to ensure transparency and fairness in every round. Additionally Judges comments and feedback can be shared with Choreographers upon request.</p>
+              <p>Our judges are carefully selected to ensure transparency and fairness in every round. 
+                Additionally Judges comments and feedback can be shared with Choreographers upon request.</p>
             </div>
           </li>
           <li>
