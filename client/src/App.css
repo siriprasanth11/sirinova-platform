@@ -225,6 +225,97 @@ body {
   margin-top: -8px;
 }
 
+/* CATEGORY PILLS */
+.pill-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.pill {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: rgba(255,215,0,0.05);
+  color: var(--gold-soft);
+  font-size: 0.86rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* GUIDELINES */
+.guideline-list {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+}
+
+.guideline-list li {
+  position: relative;
+  padding-left: 26px;
+  margin: 10px 0;
+  color: #d3cac3;
+  line-height: 1.6;
+}
+
+.guideline-list li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: var(--gold-soft);
+  font-size: 0.85rem;
+}
+
+.guideline-list strong {
+  color: var(--ivory);
+}
+
+/* WHY SIRINOVA */
+.why-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.why-list li {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.why-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255,215,0,0.06);
+  border: 1px solid var(--border);
+}
+
+.why-list strong {
+  display: block;
+  color: var(--gold-soft);
+  font-family: "Playfair Display", serif;
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+}
+
+.why-list p {
+  margin: 0;
+  color: #d3cac3;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
 /* EVENT DETAILS */
 .event-details-grid {
   display: grid;

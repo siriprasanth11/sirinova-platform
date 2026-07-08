@@ -37,11 +37,14 @@ mongoose
 
 // ✅ Registration Schema
 const registrationSchema = new mongoose.Schema({
-  name: String,
+  teamName: String,
+  contactName: String,
   email: String,
   phone: String,
-  danceStyle: String,
-  experience: String,
+  numberOfDancers: Number,
+  ageCategory: String,
+  danceCategory: String,
+  videoLink: String,
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -74,11 +77,14 @@ app.post("/api/register", async (req, res) => {
       subject: "New SiriNova Registration 🎉",
       html: `
         <h3>New Registration</h3>
-        <p><strong>Name:</strong> ${req.body.name}</p>
+        <p><strong>Team:</strong> ${req.body.teamName}</p>
+        <p><strong>Contact:</strong> ${req.body.contactName}</p>
         <p><strong>Email:</strong> ${req.body.email}</p>
         <p><strong>Phone:</strong> ${req.body.phone}</p>
-        <p><strong>Dance Style:</strong> ${req.body.danceStyle}</p>
-        <p><strong>Experience:</strong> ${req.body.experience}</p>
+        <p><strong>Number of Dancers:</strong> ${req.body.numberOfDancers}</p>
+        <p><strong>Age Category:</strong> ${req.body.ageCategory}</p>
+        <p><strong>Dance Category:</strong> ${req.body.danceCategory}</p>
+        <p><strong>Rehearsal Video:</strong> <a href="${req.body.videoLink}">${req.body.videoLink}</a></p>
       `,
     });
 
@@ -87,8 +93,9 @@ app.post("/api/register", async (req, res) => {
       to: req.body.email,
       subject: "You're registered for SiriNova 🎉",
       html: `
-        <p>Hi ${req.body.name},</p>
-        <p>Thanks for registering with SiriNova! 🎭</p>
+        <p>Hi ${req.body.contactName},</p>
+        <p>Thanks for registering <strong>${req.body.teamName}</strong> for SiriNova! 🎭</p>
+        <p>Your rehearsal video has been received and your team is now in the audition queue.</p>
         <p>We’ll notify you once event details are announced.</p>
         <br/>
         <p>– Team SiriNova</p>

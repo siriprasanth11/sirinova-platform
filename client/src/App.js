@@ -4,14 +4,20 @@ import "./App.css";
 const API_BASE = "https://sirinova-platform.onrender.com";
 const ADMIN_PASSWORD = "admin123";
 
-const DANCE_STYLES = [
-  "Hip Hop", "Contemporary", "Bollywood", "Ballet", "Bharatanatyam",
-  "Fusion", "Salsa / Latin", "Folk", "Other"
+const AGE_CATEGORIES = [
+  "Kids (5–10)", "Junior (11–18)", "Adults (18+)"
 ];
 
-const EXPERIENCE_LEVELS = ["Beginner", "Intermediate", "Advanced", "Professional"];
+const DANCE_CATEGORIES = [
+  "Indian Classical", "Indian Movies", "Indian Folk / Regional"
+];
 
-const EMPTY_FORM = { name: "", email: "", phone: "", danceStyle: "", experience: "" };
+const MIN_DANCERS = 8;
+
+const EMPTY_FORM = {
+  teamName: "", contactName: "", email: "", phone: "",
+  numberOfDancers: "", ageCategory: "", danceCategory: "", videoLink: ""
+};
 
 function App() {
   const [showMain, setShowMain] = useState(false);
@@ -65,12 +71,17 @@ function App() {
 
   const validateForm = () => {
     const errors = {};
-    if (!formData.name?.trim()) errors.name = "Name is required";
+    if (!formData.teamName?.trim()) errors.teamName = "Team/group name is required";
+    if (!formData.contactName?.trim()) errors.contactName = "Contact person name is required";
     if (!formData.email?.trim()) errors.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(formData.email)) errors.email = "Enter a valid email";
     if (!formData.phone?.trim()) errors.phone = "Phone number is required";
-    if (!formData.danceStyle) errors.danceStyle = "Select a dance style";
-    if (!formData.experience) errors.experience = "Select an experience level";
+    if (!formData.numberOfDancers) errors.numberOfDancers = "Number of dancers is required";
+    else if (Number(formData.numberOfDancers) < MIN_DANCERS) errors.numberOfDancers = `Minimum ${MIN_DANCERS} dancers required`;
+    if (!formData.ageCategory) errors.ageCategory = "Select an age category";
+    if (!formData.danceCategory) errors.danceCategory = "Select a dance category";
+    if (!formData.videoLink?.trim()) errors.videoLink = "Rehearsal video link is required for audition";
+    else if (!/^https?:\/\/.+/.test(formData.videoLink.trim())) errors.videoLink = "Enter a valid link (starting with http:// or https://)";
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -172,23 +183,61 @@ function App() {
       <section className="card">
         <h2>About</h2>
         <p>
-          SiriNova is a creative hub designed to bring together choreographers, dancers, and performance artists under one vibrant digital roof.
-          We believe every movement tells a story, and our mission is to amplify those stories by connecting talented choreographers with opportunities,
-          events, and audiences that truly value their art.
+          SiriNova is a group dance competition bringing choreographers, dancers, and performance
+          artists together on one stage. We believe every movement tells a story, and our mission is
+          to amplify those stories by giving choreographers a platform, an audience, and the recognition
+          their art deserves.
         </p>
 
-        <h3 className="section-subtitle">Our Goal &amp; Intention</h3>
+        <h3 className="section-subtitle">Age Categories</h3>
+        <div className="pill-grid">
+          {AGE_CATEGORIES.map(cat => (
+            <span className="pill" key={cat}>{cat}</span>
+          ))}
+        </div>
 
-        <p>
-          Our goal is to build a platform that celebrates creativity, collaboration, and cultural expression.
-          We support choreographers by offering a structured, low-overhead stage for student performances,
-          vendor partnerships, and sponsorships that make shows sustainable and frequent.
-        </p>
+        <h3 className="section-subtitle">Dance Categories</h3>
+        <div className="pill-grid">
+          {DANCE_CATEGORIES.map(cat => (
+            <span className="pill" key={cat}>{cat}</span>
+          ))}
+        </div>
 
-        <p>
-          Whether you're an emerging artist or a seasoned choreographer, SiriNova is your stage to shine —
-          to inspire, teach, and connect through the universal language of dance.
-        </p>
+        <h3 className="section-subtitle">Guidelines</h3>
+        <ul className="guideline-list">
+          <li>Group dances only — minimum <strong>8 dancers</strong> per team</li>
+          <li>Performance time: <strong>5 minutes</strong></li>
+          <li>Registration deadline: <strong>September 4</strong></li>
+          <li>A <strong>rehearsal video</strong> must be submitted with registration for audition</li>
+        </ul>
+      </section>
+
+      {/* WHY SIRINOVA */}
+      <section className="card">
+        <h2>Why SiriNova</h2>
+        <ul className="why-list">
+          <li>
+            <span className="why-icon">⚖️</span>
+            <div>
+              <strong>Judged fairly</strong>
+              <p>Our judges are carefully selected to ensure transparency and fairness in every round.</p>
+            </div>
+          </li>
+          <li>
+            <span className="why-icon">🎭</span>
+            <div>
+              <strong>Judged by artists, for artists</strong>
+              <p>The judging panel spans all art forms, bringing a well-rounded, informed perspective to every performance.</p>
+            </div>
+          </li>
+          <li>
+            <span className="why-icon">📍</span>
+            <div>
+              <strong>A first for Charlotte</strong>
+              <p>SiriNova is the first competition of its kind held in Charlotte, bringing together dance choreographers from across the state.</p>
+            </div>
+          </li>
+        </ul>
       </section>
 
       {/* EVENT */}
@@ -223,18 +272,31 @@ function App() {
       {/* REGISTER */}
       <section className="card" id="register">
         <h2>Register</h2>
-        <p className="form-intro">Tell us about yourself and your craft — we'll be in touch.</p>
+        <p className="form-intro">
+          Register your team and share a rehearsal video for audition. Deadline: September 4.
+        </p>
 
         <form className="registration-form" onSubmit={submitForm} noValidate>
           <div className="field">
             <input
-              value={formData.name || ""}
-              placeholder="Full Name"
-              aria-label="Full Name"
-              className={formErrors.name ? "input-error" : ""}
-              onChange={e => setFormData({ ...formData, name: e.target.value })}
+              value={formData.teamName || ""}
+              placeholder="Team / Group Name"
+              aria-label="Team or Group Name"
+              className={formErrors.teamName ? "input-error" : ""}
+              onChange={e => setFormData({ ...formData, teamName: e.target.value })}
             />
-            {formErrors.name && <span className="error-text">{formErrors.name}</span>}
+            {formErrors.teamName && <span className="error-text">{formErrors.teamName}</span>}
+          </div>
+
+          <div className="field">
+            <input
+              value={formData.contactName || ""}
+              placeholder="Contact Person Name"
+              aria-label="Contact Person Name"
+              className={formErrors.contactName ? "input-error" : ""}
+              onChange={e => setFormData({ ...formData, contactName: e.target.value })}
+            />
+            {formErrors.contactName && <span className="error-text">{formErrors.contactName}</span>}
           </div>
 
           <div className="field">
@@ -262,33 +324,57 @@ function App() {
           </div>
 
           <div className="field">
-            <select
-              value={formData.danceStyle || ""}
-              aria-label="Dance Style"
-              className={formErrors.danceStyle ? "input-error" : ""}
-              onChange={e => setFormData({ ...formData, danceStyle: e.target.value })}
-            >
-              <option value="" disabled>Dance Style</option>
-              {DANCE_STYLES.map(style => (
-                <option key={style} value={style}>{style}</option>
-              ))}
-            </select>
-            {formErrors.danceStyle && <span className="error-text">{formErrors.danceStyle}</span>}
+            <input
+              type="number"
+              min={MIN_DANCERS}
+              value={formData.numberOfDancers || ""}
+              placeholder={`Number of Dancers (min ${MIN_DANCERS})`}
+              aria-label="Number of Dancers"
+              className={formErrors.numberOfDancers ? "input-error" : ""}
+              onChange={e => setFormData({ ...formData, numberOfDancers: e.target.value })}
+            />
+            {formErrors.numberOfDancers && <span className="error-text">{formErrors.numberOfDancers}</span>}
           </div>
 
           <div className="field">
             <select
-              value={formData.experience || ""}
-              aria-label="Experience Level"
-              className={formErrors.experience ? "input-error" : ""}
-              onChange={e => setFormData({ ...formData, experience: e.target.value })}
+              value={formData.ageCategory || ""}
+              aria-label="Age Category"
+              className={formErrors.ageCategory ? "input-error" : ""}
+              onChange={e => setFormData({ ...formData, ageCategory: e.target.value })}
             >
-              <option value="" disabled>Experience Level</option>
-              {EXPERIENCE_LEVELS.map(level => (
-                <option key={level} value={level}>{level}</option>
+              <option value="" disabled>Age Category</option>
+              {AGE_CATEGORIES.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
               ))}
             </select>
-            {formErrors.experience && <span className="error-text">{formErrors.experience}</span>}
+            {formErrors.ageCategory && <span className="error-text">{formErrors.ageCategory}</span>}
+          </div>
+
+          <div className="field">
+            <select
+              value={formData.danceCategory || ""}
+              aria-label="Dance Category"
+              className={formErrors.danceCategory ? "input-error" : ""}
+              onChange={e => setFormData({ ...formData, danceCategory: e.target.value })}
+            >
+              <option value="" disabled>Dance Category</option>
+              {DANCE_CATEGORIES.map(cat => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
+            </select>
+            {formErrors.danceCategory && <span className="error-text">{formErrors.danceCategory}</span>}
+          </div>
+
+          <div className="field">
+            <input
+              value={formData.videoLink || ""}
+              placeholder="Rehearsal Video Link (for audition)"
+              aria-label="Rehearsal Video Link"
+              className={formErrors.videoLink ? "input-error" : ""}
+              onChange={e => setFormData({ ...formData, videoLink: e.target.value })}
+            />
+            {formErrors.videoLink && <span className="error-text">{formErrors.videoLink}</span>}
           </div>
 
           <button className="cta" disabled={submitting}>
@@ -377,21 +463,31 @@ function App() {
                     <table className="admin-table">
                       <thead>
                         <tr>
-                          <th>Name</th>
+                          <th>Team</th>
+                          <th>Contact</th>
                           <th>Email</th>
                           <th>Phone</th>
-                          <th>Style</th>
-                          <th>Experience</th>
+                          <th>Dancers</th>
+                          <th>Age Category</th>
+                          <th>Dance Category</th>
+                          <th>Video</th>
                         </tr>
                       </thead>
                       <tbody>
                         {registrations.map((user) => (
                           <tr key={user._id}>
-                            <td>{user.name}</td>
+                            <td>{user.teamName}</td>
+                            <td>{user.contactName}</td>
                             <td>{user.email}</td>
                             <td>{user.phone}</td>
-                            <td>{user.danceStyle}</td>
-                            <td>{user.experience}</td>
+                            <td>{user.numberOfDancers}</td>
+                            <td>{user.ageCategory}</td>
+                            <td>{user.danceCategory}</td>
+                            <td>
+                              {user.videoLink && (
+                                <a href={user.videoLink} target="_blank" rel="noopener noreferrer">View</a>
+                              )}
+                            </td>
                           </tr>
                         ))}
                       </tbody>
