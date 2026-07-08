@@ -52,6 +52,7 @@ const eventSchema = new mongoose.Schema({
   venue: String,
   date: String,
   time: String,
+  ticketUrl: String,
 });
 
 const Event = mongoose.model("Event", eventSchema);
@@ -135,6 +136,7 @@ app.post("/api/event", async (req, res) => {
       event.venue = req.body.venue;
       event.date = req.body.date;
       event.time = req.body.time;
+      event.ticketUrl = req.body.ticketUrl;
     }
 
     await event.save();
