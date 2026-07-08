@@ -316,33 +316,94 @@ body {
   font-size: 0.95rem;
 }
 
-/* EVENT DETAILS */
+/* EVENT — highlighted */
+.event-card {
+  position: relative;
+  max-width: 820px;
+  padding-top: 36px;
+  border: 1px solid rgba(255,215,0,0.35);
+  background: linear-gradient(160deg, rgba(255,215,0,0.07), rgba(122,31,61,0.09));
+  box-shadow: 0 0 55px rgba(255,215,0,0.12), inset 0 0 40px rgba(255,215,0,0.03);
+  text-align: center;
+  animation: fadeUp 0.8s ease, eventGlow 4s ease-in-out infinite;
+}
+
+@keyframes eventGlow {
+  0%, 100% { box-shadow: 0 0 55px rgba(255,215,0,0.12), inset 0 0 40px rgba(255,215,0,0.03); }
+  50% { box-shadow: 0 0 75px rgba(255,215,0,0.22), inset 0 0 50px rgba(255,215,0,0.06); }
+}
+
+.event-card h2 {
+  border-bottom: none;
+  font-size: 1.7rem;
+}
+
+.event-badge {
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, var(--gold), #e6b800);
+  color: #1a1108;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 999px;
+  box-shadow: 0 4px 16px rgba(255,215,0,0.35);
+  white-space: nowrap;
+}
+
 .event-details-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 16px;
-  margin-bottom: 18px;
+  margin: 8px 0 22px;
 }
 
-.event-details-grid > div {
+.event-detail {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
   background: rgba(255,255,255,0.03);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 14px 16px;
+  border-radius: 12px;
+  padding: 20px 16px;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.event-detail:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255,215,0,0.4);
+}
+
+.event-detail-icon {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
 }
 
 .event-label {
-  display: block;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--gold-soft);
-  margin-bottom: 6px;
+}
+
+.event-value {
+  font-family: "Playfair Display", serif;
+  font-size: 1.05rem;
+  color: var(--ivory);
+  font-weight: 600;
 }
 
 .ticket-cta {
   text-decoration: none;
   display: inline-block;
+  font-size: 1.05rem;
+  padding: 15px 32px;
+  box-shadow: 0 6px 24px rgba(255,215,0,0.3);
 }
 
 /* FORM */
@@ -396,6 +457,27 @@ body {
   color: var(--error);
   font-size: 0.8rem;
   margin-top: 4px;
+}
+
+.form-banner {
+  padding: 13px 16px;
+  border-radius: 9px;
+  font-size: 0.92rem;
+  font-weight: 500;
+  margin: 14px 0 4px;
+  animation: toastIn 0.3s ease;
+}
+
+.form-banner-success {
+  background: rgba(76,174,107,0.14);
+  border: 1px solid var(--success);
+  color: #a8e6bb;
+}
+
+.form-banner-error {
+  background: rgba(226,89,107,0.14);
+  border: 1px solid var(--error);
+  color: #f6b3bc;
 }
 
 /* BUTTON */

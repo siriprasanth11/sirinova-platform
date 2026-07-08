@@ -25,6 +25,7 @@ function App() {
   const [eventLoading, setEventLoading] = useState(true);
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [formErrors, setFormErrors] = useState({});
+  const [formStatus, setFormStatus] = useState(null); // { type, message }
   const [submitting, setSubmitting] = useState(false);
 
   const [isAdmin, setIsAdmin] = useState(false);
@@ -83,13 +84,21 @@ function App() {
     if (!formData.videoLink?.trim()) errors.videoLink = "Rehearsal video link is required for audition";
     else if (!/^https?:\/\/.+/.test(formData.videoLink.trim())) errors.videoLink = "Enter a valid link (starting with http:// or https://)";
     setFormErrors(errors);
-    return Object.keys(errors).length === 0;
+    return errors;
   };
 
   const submitForm = async (e) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    const errors = validateForm();
 
+    if (Object.keys(errors).length > 0) {
+      setFormStatus({ type: "error", message: "Please fix the highlighted fields below." });
+      const firstErrorField = document.getElementById(`field-${Object.keys(errors)[0]}`);
+      if (firstErrorField) firstErrorField.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    setFormStatus(null);
     setSubmitting(true);
     try {
       const res = await fetch(`${API_BASE}/api/register`, {
@@ -99,11 +108,12 @@ function App() {
       });
       if (!res.ok) throw new Error("Registration failed");
 
-      showToast("You're in! Check your email for confirmation. 🎉", "success");
       setFormData(EMPTY_FORM);
       setFormErrors({});
+      setFormStatus({ type: "success", message: "🎉 You're in! Check your email for confirmation." });
     } catch (err) {
-      showToast("Something went wrong. Please try again.", "error");
+      console.error("Registration error:", err);
+      setFormStatus({ type: "error", message: "Something went wrong submitting your registration. Please try again." });
     } finally {
       setSubmitting(false);
     }
@@ -179,12 +189,53 @@ function App() {
         <a href="#register" className="cta hero-cta">Register to Perform</a>
       </section>
 
+      {/* EVENT — highlighted */}
+      <section className="card event-card">
+        <div className="event-badge">✦ Save the Date ✦</div>
+        <h2>The Event</h2>
+
+        {eventLoading ? (
+          <div className="skeleton-block" />
+        ) : !hasEvent ? (
+          <div className="coming-text">✨ Coming Soon ✨</div>
+        ) : (
+          <>
+            <div className="event-details-grid">
+              <div className="event-detail">
+                <span className="event-detail-icon">📍</span>
+                <span className="event-label">Venue</span>
+                <span className="event-value">{eventDetails.venue}</span>
+              </div>
+              <div className="event-detail">
+                <span className="event-detail-icon">📅</span>
+                <span className="event-label">Date</span>
+                <span className="event-value">{eventDetails.date}</span>
+              </div>
+              <div className="event-detail">
+                <span className="event-detail-icon">🕒</span>
+                <span className="event-label">Time</span>
+                <span className="event-value">{eventDetails.time}</span>
+              </div>
+            </div>
+            {eventDetails.ticketUrl && (
+              <a
+                href={eventDetails.ticketUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cta ticket-cta"
+              >
+                🎟 Get Your Tickets
+              </a>
+            )}
+          </>
+        )}
+      </section>
+
       {/* ABOUT */}
       <section className="card">
         <h2>About</h2>
         <p>
-          SiriNova is a group dance competition bringing choreographers, dancers, and performance
-          artists together on one stage. We believe every movement tells a story, and our mission is
+          SiriNova is a group dance competition bringing choreographers, dancers, and performancers together on one stage. We believe every movement tells a story, and our mission is
           to amplify those stories by giving choreographers a platform, an audience, and the recognition
           their art deserves.
         </p>
@@ -207,7 +258,7 @@ function App() {
         <ul className="guideline-list">
           <li>Group dances only — minimum <strong>8 dancers</strong> per team</li>
           <li>Performance time: <strong>5 minutes</strong></li>
-          <li>Registration deadline: <strong>September 4</strong></li>
+          <li>Registration deadline: <strong>September 4th 2026</strong></li>
           <li>A <strong>rehearsal video</strong> must be submitted with registration for audition</li>
         </ul>
       </section>
@@ -220,7 +271,7 @@ function App() {
             <span className="why-icon">⚖️</span>
             <div>
               <strong>Judged fairly</strong>
-              <p>Our judges are carefully selected to ensure transparency and fairness in every round.</p>
+              <p>Our judges are carefully selected to ensure transparency and fairness in every round. Additionally Judges comments and feedback can be shared with Choreographers upon request.</p>
             </div>
           </li>
           <li>
@@ -240,35 +291,6 @@ function App() {
         </ul>
       </section>
 
-      {/* EVENT */}
-      <section className="card">
-        <h2>Event</h2>
-
-        {eventLoading ? (
-          <div className="skeleton-block" />
-        ) : !hasEvent ? (
-          <div className="coming-text">✨ Coming Soon ✨</div>
-        ) : (
-          <>
-            <div className="event-details-grid">
-              <div><span className="event-label">Venue</span>{eventDetails.venue}</div>
-              <div><span className="event-label">Date</span>{eventDetails.date}</div>
-              <div><span className="event-label">Time</span>{eventDetails.time}</div>
-            </div>
-            {eventDetails.ticketUrl && (
-              <a
-                href={eventDetails.ticketUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cta ticket-cta"
-              >
-                Get Your Tickets
-              </a>
-            )}
-          </>
-        )}
-      </section>
-
       {/* REGISTER */}
       <section className="card" id="register">
         <h2>Register</h2>
@@ -277,7 +299,7 @@ function App() {
         </p>
 
         <form className="registration-form" onSubmit={submitForm} noValidate>
-          <div className="field">
+          <div className="field" id="field-teamName">
             <input
               value={formData.teamName || ""}
               placeholder="Team / Group Name"
@@ -288,7 +310,7 @@ function App() {
             {formErrors.teamName && <span className="error-text">{formErrors.teamName}</span>}
           </div>
 
-          <div className="field">
+          <div className="field" id="field-contactName">
             <input
               value={formData.contactName || ""}
               placeholder="Contact Person Name"
@@ -299,7 +321,7 @@ function App() {
             {formErrors.contactName && <span className="error-text">{formErrors.contactName}</span>}
           </div>
 
-          <div className="field">
+          <div className="field" id="field-email">
             <input
               type="email"
               value={formData.email || ""}
@@ -311,7 +333,7 @@ function App() {
             {formErrors.email && <span className="error-text">{formErrors.email}</span>}
           </div>
 
-          <div className="field">
+          <div className="field" id="field-phone">
             <input
               type="tel"
               value={formData.phone || ""}
@@ -323,7 +345,7 @@ function App() {
             {formErrors.phone && <span className="error-text">{formErrors.phone}</span>}
           </div>
 
-          <div className="field">
+          <div className="field" id="field-numberOfDancers">
             <input
               type="number"
               min={MIN_DANCERS}
@@ -336,7 +358,7 @@ function App() {
             {formErrors.numberOfDancers && <span className="error-text">{formErrors.numberOfDancers}</span>}
           </div>
 
-          <div className="field">
+          <div className="field" id="field-ageCategory">
             <select
               value={formData.ageCategory || ""}
               aria-label="Age Category"
@@ -351,7 +373,7 @@ function App() {
             {formErrors.ageCategory && <span className="error-text">{formErrors.ageCategory}</span>}
           </div>
 
-          <div className="field">
+          <div className="field" id="field-danceCategory">
             <select
               value={formData.danceCategory || ""}
               aria-label="Dance Category"
@@ -366,7 +388,7 @@ function App() {
             {formErrors.danceCategory && <span className="error-text">{formErrors.danceCategory}</span>}
           </div>
 
-          <div className="field">
+          <div className="field" id="field-videoLink">
             <input
               value={formData.videoLink || ""}
               placeholder="Rehearsal Video Link (for audition)"
@@ -376,6 +398,12 @@ function App() {
             />
             {formErrors.videoLink && <span className="error-text">{formErrors.videoLink}</span>}
           </div>
+
+          {formStatus && (
+            <div className={`form-banner form-banner-${formStatus.type}`} role="status">
+              {formStatus.message}
+            </div>
+          )}
 
           <button className="cta" disabled={submitting}>
             {submitting ? "Submitting…" : "Register"}
