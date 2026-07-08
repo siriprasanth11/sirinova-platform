@@ -205,6 +205,16 @@ function App() {
                 <span className="event-detail-icon">📍</span>
                 <span className="event-label">Venue</span>
                 <span className="event-value">{eventDetails.venue}</span>
+                {eventDetails.address && (
+                  <a
+                    className="event-address-link"
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(eventDetails.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {eventDetails.address} ↗
+                  </a>
+                )}
               </div>
               <div className="event-detail">
                 <span className="event-detail-icon">📅</span>
@@ -235,8 +245,9 @@ function App() {
       <section className="card">
         <h2>About</h2>
         <p>
-          SiriNova is a group dance competition bringing choreographers, dancers, and performers together on one stage. 
-          We believe every movement tells a story, and our mission is to amplify those stories by giving choreographers a platform, an audience, and the recognition
+          SiriNova is a group dance competition bringing choreographers, dancers, and performance
+          artists together on one stage. We believe every movement tells a story, and our mission is
+          to amplify those stories by giving choreographers a platform, an audience, and the recognition
           their art deserves.
         </p>
 
@@ -258,7 +269,7 @@ function App() {
         <ul className="guideline-list">
           <li>Group dances only — minimum <strong>8 dancers</strong> per team</li>
           <li>Performance time: <strong>5 minutes</strong></li>
-          <li>Registration deadline: <strong>September 4th 2026</strong></li>
+          <li>Registration deadline: <strong>September 4</strong></li>
           <li>A <strong>rehearsal video</strong> must be submitted with registration for audition</li>
         </ul>
       </section>
@@ -271,8 +282,7 @@ function App() {
             <span className="why-icon">⚖️</span>
             <div>
               <strong>Judged fairly</strong>
-              <p>Our judges are carefully selected to ensure transparency and fairness in every round. 
-                Additionally Judges comments and feedback can be shared with Choreographers upon request.</p>
+              <p>Our judges are carefully selected to ensure transparency and fairness in every round.</p>
             </div>
           </li>
           <li>
@@ -458,6 +468,11 @@ function App() {
                   value={eventDetails.venue || ""}
                   placeholder="Venue"
                   onChange={e => setEventDetails({ ...eventDetails, venue: e.target.value })}
+                />
+                <input
+                  value={eventDetails.address || ""}
+                  placeholder="Address (e.g. 415 Martin Luther King Jr Ave, Kannapolis, NC 28083)"
+                  onChange={e => setEventDetails({ ...eventDetails, address: e.target.value })}
                 />
                 <input
                   value={eventDetails.date || ""}

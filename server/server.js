@@ -53,6 +53,7 @@ const Registration = mongoose.model("Registration", registrationSchema);
 // ✅ Event Schema (for admin dashboard)
 const eventSchema = new mongoose.Schema({
   venue: String,
+  address: String,
   date: String,
   time: String,
   ticketUrl: String,
@@ -141,6 +142,7 @@ app.post("/api/event", async (req, res) => {
       event = new Event(req.body);
     } else {
       event.venue = req.body.venue;
+      event.address = req.body.address;
       event.date = req.body.date;
       event.time = req.body.time;
       event.ticketUrl = req.body.ticketUrl;

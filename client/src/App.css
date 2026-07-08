@@ -398,6 +398,20 @@ body {
   font-weight: 600;
 }
 
+.event-address-link {
+  font-family: "Inter", sans-serif;
+  font-size: 0.82rem;
+  color: var(--gold-soft);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  margin-top: 2px;
+  transition: color 0.2s ease;
+}
+
+.event-address-link:hover {
+  color: var(--gold);
+}
+
 .ticket-cta {
   text-decoration: none;
   display: inline-block;
