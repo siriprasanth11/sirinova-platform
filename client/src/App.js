@@ -235,7 +235,7 @@ function App() {
       <section className="card">
         <h2>About</h2>
         <p>
-          SiriNova is a group dance competition bringing choreographers, dancers, and performancers together on one stage. 
+          SiriNova is a group dance competition bringing choreographers, dancers, and performers together on one stage. 
           We believe every movement tells a story, and our mission is to amplify those stories by giving choreographers a platform, an audience, and the recognition
           their art deserves.
         </p>
