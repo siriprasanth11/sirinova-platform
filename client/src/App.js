@@ -271,6 +271,7 @@ function App() {
           <li>Performance time: <strong>5 minutes</strong></li>
           <li>Registration deadline: <strong>September 4</strong></li>
           <li>A <strong>rehearsal video</strong> must be submitted with registration for audition</li>
+          <li>Registration fee: <strong>$50</strong> (non-refundable) + <strong>$20 per participant</strong></li>
         </ul>
       </section>
 
@@ -308,6 +309,14 @@ function App() {
         <p className="form-intro">
           Register your team and share a rehearsal video for audition. Deadline: September 4.
         </p>
+
+        <div className="fee-note">
+          <span className="fee-note-icon">💳</span>
+          <span>
+            <strong>$50 registration fee</strong> (non-refundable) + <strong>$20 per participant</strong>.
+            Payment details will be shared after your team is confirmed.
+          </span>
+        </div>
 
         <form className="registration-form" onSubmit={submitForm} noValidate>
           <div className="field" id="field-teamName">
