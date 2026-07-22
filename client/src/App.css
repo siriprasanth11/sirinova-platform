@@ -249,6 +249,17 @@ body {
   color: var(--gold-soft);
 }
 
+/* DEADLINE HIGHLIGHT */
+.deadline-highlight {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--gold), #e6b800);
+  color: #1a1108;
+  font-weight: 700;
+  padding: 2px 9px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
 /* CATEGORY PILLS */
 .pill-grid {
   display: flex;
@@ -567,6 +578,13 @@ body {
   background: linear-gradient(90deg, rgba(255,255,255,0.03) 25%, rgba(255,255,255,0.07) 37%, rgba(255,255,255,0.03) 63%);
   background-size: 400% 100%;
   animation: shimmer 1.4s ease infinite;
+}
+
+.loading-hint {
+  color: var(--muted);
+  font-size: 0.82rem;
+  text-align: center;
+  margin-top: 10px;
 }
 
 @keyframes shimmer {

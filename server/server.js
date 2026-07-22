@@ -125,7 +125,7 @@ app.get("/api/registrations", async (req, res) => {
 // ✅ Get Event Details
 app.get("/api/event", async (req, res) => {
   try {
-    const event = await Event.findOne();
+    const event = await Event.findOne().lean();
     res.json(event);
   } catch (err) {
     console.error(err);

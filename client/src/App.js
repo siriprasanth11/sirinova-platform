@@ -13,6 +13,7 @@ const DANCE_CATEGORIES = [
 ];
 
 const MIN_DANCERS = 8;
+const EVENT_CACHE_KEY = "sirinova_event_cache";
 
 const EMPTY_FORM = {
   teamName: "", contactName: "", email: "", phone: "",
@@ -51,11 +52,36 @@ function App() {
   };
 
   useEffect(() => {
-    setEventLoading(true);
+    // Show the last known event details instantly (if cached) while we
+    // revalidate in the background — avoids a blank/slow-looking tab when
+    // the backend is cold-starting (Render free tier spins down after idle).
+    let hadCache = false;
+    try {
+      const cached = localStorage.getItem(EVENT_CACHE_KEY);
+      if (cached) {
+        setEventDetails(JSON.parse(cached));
+        setEventLoading(false);
+        hadCache = true;
+      }
+    } catch {
+      // ignore corrupt cache
+    }
+
+    if (!hadCache) setEventLoading(true);
+
     fetch(`${API_BASE}/api/event`)
       .then(res => res.json())
-      .then(data => setEventDetails(data || {}))
-      .catch(() => showToast("Couldn't load event details. Try refreshing.", "error"))
+      .then(data => {
+        setEventDetails(data || {});
+        try {
+          localStorage.setItem(EVENT_CACHE_KEY, JSON.stringify(data || {}));
+        } catch {
+          // ignore storage errors (e.g. private browsing)
+        }
+      })
+      .catch(() => {
+        if (!hadCache) showToast("Couldn't load event details. Try refreshing.", "error");
+      })
       .finally(() => setEventLoading(false));
   }, [showToast]);
 
@@ -195,7 +221,10 @@ function App() {
         <h2>The Event</h2>
 
         {eventLoading ? (
-          <div className="skeleton-block" />
+          <>
+            <div className="skeleton-block" />
+            <p className="loading-hint">Waking up the server — this can take up to a minute on the first load.</p>
+          </>
         ) : !hasEvent ? (
           <div className="coming-text">✨ Coming Soon ✨</div>
         ) : (
@@ -269,7 +298,7 @@ function App() {
         <ul className="guideline-list">
           <li>Group dances only — minimum <strong>8 dancers</strong> per team</li>
           <li>Performance time: <strong>5 minutes</strong></li>
-          <li>Registration deadline: <strong>September 4</strong></li>
+          <li>Registration deadline: <span className="deadline-highlight">September 4</span></li>
           <li>A <strong>rehearsal video</strong> must be submitted with registration for audition</li>
           <li>Registration fee: <strong>$50</strong> (non-refundable) + <strong>$20 per participant</strong></li>
         </ul>
@@ -307,14 +336,13 @@ function App() {
       <section className="card" id="register">
         <h2>Register</h2>
         <p className="form-intro">
-          Register your team and share a rehearsal video for audition. Deadline: September 4.
+          Register your team and share a rehearsal video for audition. Deadline: <span className="deadline-highlight">September 4</span>.
         </p>
 
         <div className="fee-note">
           <span className="fee-note-icon">💳</span>
           <span>
             <strong>$50 registration fee</strong> (non-refundable) + <strong>$20 per participant</strong>.
-            Payment details will be shared after your team is confirmed.
           </span>
         </div>
 
