@@ -5,11 +5,11 @@ const API_BASE = "https://sirinova-platform.onrender.com";
 const ADMIN_PASSWORD = "admin123";
 
 const AGE_CATEGORIES = [
-  "Kids (5–10)", "Junior (11–18)", "Adults (18+)"
+  "Teens (14–18)", "Adults (18+)"
 ];
 
 const DANCE_CATEGORIES = [
-  "Indian Classical", "Indian Movies", "Indian Folk / Regional"
+  "Classical", "Non Classical"
 ];
 
 const MIN_DANCERS = 8;
@@ -300,7 +300,7 @@ function App() {
           <li>Performance time: <strong>5 minutes</strong></li>
           <li>Registration deadline: <span className="deadline-highlight">September 4</span></li>
           <li>A <strong>rehearsal video</strong> must be submitted with registration for audition</li>
-          <li>Registration fee: <strong>$50</strong> (non-refundable) + <strong>$20 per participant</strong></li>
+          <li>Registration fee: <strong>$30</strong> (non-refundable) + <strong>$20 per participant</strong></li>
         </ul>
       </section>
 
@@ -342,7 +342,7 @@ function App() {
         <div className="fee-note">
           <span className="fee-note-icon">💳</span>
           <span>
-            <strong>$50 registration fee</strong> (non-refundable) + <strong>$20 per participant</strong>.
+            <strong>$30 registration fee</strong> (non-refundable) + <strong>$20 per participant</strong>.
           </span>
         </div>
 
