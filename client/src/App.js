@@ -297,7 +297,7 @@ function App() {
         <h3 className="section-subtitle">Guidelines</h3>
         <ul className="guideline-list">
           <li>Group dances only — minimum <strong>8 dancers</strong> per team</li>
-          <li>Performance time: <strong>5 minutes</strong></li>
+          <li>Performance time: <strong>6 minutes</strong></li>
           <li>Registration deadline: <span className="deadline-highlight">September 4</span></li>
           <li>A <strong>rehearsal video</strong> must be submitted with registration for audition</li>
           <li>Registration fee: <strong>$30</strong> (non-refundable) + <strong>$20 per participant</strong></li>
