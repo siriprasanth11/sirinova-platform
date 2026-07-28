@@ -17,9 +17,13 @@ pnpm-debug.log*
 .env.production.local
 
 # Build outputs
-dist/
-build/
-!client/build/     # ✅ allow only client/build to be committed
+# (client/build IS committed on purpose — server.js serves it as the live
+# site. Do not add a generic "build/" ignore rule here: it silently blocks
+# new content-hashed files every time the client is rebuilt, since the
+# "!client/build/" negation trick doesn't reliably re-include brand-new
+# files/subfolders, only ones that were already tracked before the rule
+# existed. If a build-output ignore is ever needed again, scope it to an
+# exact path that isn't a parent of client/build.)
 
 # IDE and OS junk
 .vscode/
