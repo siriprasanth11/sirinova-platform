@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-SiriNova is a full-stack team-based dance competition registration site (React + Express/MongoDB), deployed as a single Render web service at `https://sirinova-platform.onrender.com`.
+SiriNova is a full-stack team-based dance competition registration site (React + Express/MongoDB), deployed as a single Render web service at `https://sirinova-platform.onrender.com`. (A custom domain, `sirinova.org`, is planned but not yet DNS-verified — don't point `API_BASE` at it until confirmed live.)
 
 ## Commands
 

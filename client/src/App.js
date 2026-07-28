@@ -107,8 +107,7 @@ function App() {
     else if (Number(formData.numberOfDancers) < MIN_DANCERS) errors.numberOfDancers = `Minimum ${MIN_DANCERS} dancers required`;
     if (!formData.ageCategory) errors.ageCategory = "Select an age category";
     if (!formData.danceCategory) errors.danceCategory = "Select a dance category";
-    if (!formData.videoLink?.trim()) errors.videoLink = "Rehearsal video link is required for audition";
-    else if (!/^https?:\/\/.+/.test(formData.videoLink.trim())) errors.videoLink = "Enter a valid link (starting with http:// or https://)";
+    if (formData.videoLink?.trim() && !/^https?:\/\/.+/.test(formData.videoLink.trim())) errors.videoLink = "Enter a valid link (starting with http:// or https://)";
     setFormErrors(errors);
     return errors;
   };
@@ -299,7 +298,7 @@ function App() {
           <li>Group dances only — minimum <strong>8 dancers</strong> per team</li>
           <li>Performance time: <strong>6 minutes</strong></li>
           <li>Registration deadline: <span className="deadline-highlight">September 4</span></li>
-          <li>A <strong>rehearsal video</strong> must be submitted with registration for audition</li>
+          <li>A <strong>rehearsal video</strong> may be submitted with registration for audition (optional)</li>
           <li>Registration fee: <strong>$30</strong> (non-refundable) + <strong>$20 per participant</strong></li>
         </ul>
       </section>
@@ -336,7 +335,7 @@ function App() {
       <section className="card" id="register">
         <h2>Register</h2>
         <p className="form-intro">
-          Register your team and share a rehearsal video for audition. Deadline: <span className="deadline-highlight">September 4</span>.
+          Register your team and optionally share a rehearsal video for audition. Deadline: <span className="deadline-highlight">September 4</span>.
         </p>
 
         <div className="fee-note">
@@ -439,7 +438,7 @@ function App() {
           <div className="field" id="field-videoLink">
             <input
               value={formData.videoLink || ""}
-              placeholder="Rehearsal Video Link (for audition)"
+              placeholder="Rehearsal Video Link (optional)"
               aria-label="Rehearsal Video Link"
               className={formErrors.videoLink ? "input-error" : ""}
               onChange={e => setFormData({ ...formData, videoLink: e.target.value })}
