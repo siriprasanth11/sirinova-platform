@@ -71,8 +71,17 @@ app.post("/api/register", async (req, res) => {
     const newReg = new Registration(req.body);
     await newReg.save();
 
-    // 📧 Email to admin
-    await transporter.sendMail({
+    // Respond as soon as the registration is safely saved — don't make the
+    // user wait on (or fail because of) email delivery. Previously the two
+    // sendMail() calls were awaited before responding, so a slow/failing
+    // Gmail send (auth hiccup, blocked port, etc.) left the frontend stuck
+    // on "Submitting…" with no confirmation even though the registration
+    // had already been written to the DB.
+    res.status(201).json({ message: "Registration successful" });
+
+    // 📧 Fire-and-forget email notifications. Failures here are logged but
+    // never block or fail the registration itself.
+    transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
       subject: "New SiriNova Registration 🎉",
@@ -87,10 +96,9 @@ app.post("/api/register", async (req, res) => {
         <p><strong>Dance Category:</strong> ${req.body.danceCategory}</p>
         <p><strong>Rehearsal Video:</strong> <a href="${req.body.videoLink}">${req.body.videoLink}</a></p>
       `,
-    });
+    }).catch(err => console.error("❌ Admin notification email failed:", err));
 
-    // 📧 Confirmation email to user (optional but recommended)
-    await transporter.sendMail({
+    transporter.sendMail({
       to: req.body.email,
       subject: "You're registered for SiriNova 🎉",
       html: `
@@ -101,9 +109,7 @@ app.post("/api/register", async (req, res) => {
         <br/>
         <p>– Team SiriNova</p>
       `,
-    });
-
-    res.status(201).json({ message: "Registration successful" });
+    }).catch(err => console.error("❌ Confirmation email failed:", err));
 
   } catch (err) {
     console.error("❌ Registration Error:", err);
