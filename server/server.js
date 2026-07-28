@@ -117,10 +117,10 @@ app.post("/api/register", async (req, res) => {
       html: `
         <p>Hi ${req.body.contactName},</p>
         <p>Thanks for registering <strong>${req.body.teamName}</strong> for SiriNova! 🎭</p>
-        <p>Your rehearsal video has been received and your team is now in the audition queue.</p>
-        <p>We’ll notify you once event details are announced.</p>
+        <p>Payment instructions and further event details will be shared with you shortly.</p>
         <br/>
-        <p>– Team SiriNova</p>
+        <p>Warm Regards,</p>
+        <p>Team SiriNova</p>
       `,
     }).catch(err => console.error("❌ Confirmation email failed:", err));
 
