@@ -22,6 +22,18 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+// Verify SMTP credentials at startup so a bad/missing EMAIL_USER or
+// EMAIL_PASS (e.g. a regular Google password instead of an App Password)
+// shows up immediately in the server logs instead of only failing silently
+// later when someone registers.
+transporter.verify((err) => {
+  if (err) {
+    console.error("❌ Email transporter verification failed — registration emails will NOT send:", err.message);
+  } else {
+    console.log("✅ Email transporter ready");
+  }
+});
+
 // ✅ MongoDB connection
 const MONGO_URI = process.env.MONGO_URI;
 
@@ -99,6 +111,7 @@ app.post("/api/register", async (req, res) => {
     }).catch(err => console.error("❌ Admin notification email failed:", err));
 
     transporter.sendMail({
+      from: process.env.EMAIL_USER,
       to: req.body.email,
       subject: "You're registered for SiriNova 🎉",
       html: `
