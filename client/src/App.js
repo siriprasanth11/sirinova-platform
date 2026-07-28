@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import "./App.css";
 
-const API_BASE = "https://sirinova-platform.onrender.com";
+const API_BASE = "https://www.sirinova.org";
 const ADMIN_PASSWORD = "admin123";
 
 const AGE_CATEGORIES = [

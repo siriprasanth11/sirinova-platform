@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project
 
-SiriNova is a full-stack team-based dance competition registration site (React + Express/MongoDB), deployed as a single Render web service at `https://sirinova-platform.onrender.com`. (A custom domain, `sirinova.org`, is planned but not yet DNS-verified — don't point `API_BASE` at it until confirmed live.)
+SiriNova is a full-stack team-based dance competition registration site (React + Express/MongoDB), deployed as a single Render web service. Live at the custom domain `https://www.sirinova.org` (the apex `sirinova.org` redirects to the `www` subdomain, so `API_BASE` points at `www.sirinova.org` directly to avoid a redirect hop on `POST` requests). Still reachable at the underlying Render URL, `https://sirinova-platform.onrender.com`, too.
 
 ## Commands
 
@@ -25,7 +25,7 @@ Run the frontend locally:
 ```bash
 cd client && npm start    # CRA dev server on :3000
 ```
-There is no dev-mode API proxy — `client/src/App.js` hardcodes `API_BASE = "https://sirinova-platform.onrender.com"`, so **running the frontend locally still talks to the live production backend/database**, not a local server. To test against a local backend, temporarily point `API_BASE` at `http://localhost:5000`.
+There is no dev-mode API proxy — `client/src/App.js` hardcodes `API_BASE = "https://www.sirinova.org"`, so **running the frontend locally still talks to the live production backend/database**, not a local server. To test against a local backend, temporarily point `API_BASE` at `http://localhost:5000`.
 
 Build the frontend (also what Render runs):
 ```bash
